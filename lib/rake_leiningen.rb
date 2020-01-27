@@ -4,36 +4,40 @@ require 'rake_leiningen/version'
 module RakeLeiningen
   def self.define_installation_tasks(opts = {})
     namespace = opts[:namespace] || :leiningen
+    dependency = 'lein'
     version = opts[:version] || '2.9.1'
     path = opts[:path] || File.join('vendor', 'leiningen')
+    type = :uncompressed
+    uri_template = "https://raw.githubusercontent.com/technomancy/" +
+        "leiningen/<%= @version %>/bin/lein"
+    file_name_template = "lein"
 
-    RakeDependencies::Tasks::All.new do |t|
-      t.namespace = namespace
-      t.dependency = 'lein'
-      t.version = version
-      t.path = path
-      t.type = :uncompressed
+    needs_fetch_checker = lambda do |t|
+      binary = File.join(t.path, t.binary_directory, 'lein')
+      version_string = StringIO.new
 
-      t.uri_template = "https://raw.githubusercontent.com/technomancy/leiningen/<%= @version %>/bin/lein"
-      t.file_name_template = "lein"
+      if File.exist?(binary)
+        Lino::CommandLineBuilder.for_command(binary)
+            .with_flag('-version')
+            .build
+            .execute(stdout: version_string)
 
-      t.needs_fetch = lambda do |parameters|
-        binary = File.join(parameters[:path], parameters[:binary_directory], 'lein')
-        version_string = StringIO.new
-
-        if File.exist?(binary)
-          Lino::CommandLineBuilder.for_command(binary)
-              .with_flag('-version')
-              .build
-              .execute(stdout: version_string)
-
-          if version_string.string.lines.first =~ /#{version}/
-            return false
-          end
+        if version_string.string.lines.first =~ /#{version}/
+          return false
         end
-
-        return true
       end
+
+      return true
     end
+
+    RakeDependencies::TaskSets::All.define(
+        namespace: namespace,
+        dependency: dependency,
+        version: version,
+        path: path,
+        type: type,
+        uri_template: uri_template,
+        file_name_template: file_name_template,
+        needs_fetch: needs_fetch_checker)
   end
 end
