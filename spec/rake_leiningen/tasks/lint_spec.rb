@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RakeLeiningen::Tasks::Format do
+describe RakeLeiningen::Tasks::Lint do
   include_context :rake
 
   before(:each) do
@@ -9,32 +9,32 @@ describe RakeLeiningen::Tasks::Format do
     end
   end
 
-  it 'adds a format task in the namespace in which it is created' do
+  it 'adds a lint task in the namespace in which it is created' do
     namespace :something do
       subject.define
     end
 
-    expect(Rake::Task.task_defined?('something:format')).to(be(true))
+    expect(Rake::Task.task_defined?('something:lint')).to(be(true))
   end
 
-  it 'gives the format task a description' do
+  it 'gives the lint task a description' do
     namespace :something do
       subject.define
     end
 
-    expect(Rake::Task["something:format"].full_comment)
-        .to(eq("Format all clojure files."))
+    expect(Rake::Task["something:lint"].full_comment)
+        .to(eq("Lint all clojure files."))
   end
 
   it 'allows the task name to be overridden' do
     namespace :something do
-      subject.define(name: :cljfmt)
+      subject.define(name: :eastwood)
     end
 
-    expect(Rake::Task.task_defined?("something:cljfmt")).to(be(true))
+    expect(Rake::Task.task_defined?("something:eastwood")).to(be(true))
   end
 
-  it 'allows multiple format tasks to be declared' do
+  it 'allows multiple lint tasks to be declared' do
     namespace :something1 do
       subject.define
     end
@@ -43,8 +43,8 @@ describe RakeLeiningen::Tasks::Format do
       subject.define
     end
 
-    expect(Rake::Task.task_defined?("something1:format")).to(be(true))
-    expect(Rake::Task.task_defined?("something2:format")).to(be(true))
+    expect(Rake::Task.task_defined?("something1:lint")).to(be(true))
+    expect(Rake::Task.task_defined?("something2:lint")).to(be(true))
   end
 
   it 'depends on the leiningen:ensure task by default' do
@@ -52,7 +52,7 @@ describe RakeLeiningen::Tasks::Format do
       subject.define
     end
 
-    expect(Rake::Task["something:format"].prerequisite_tasks)
+    expect(Rake::Task["something:lint"].prerequisite_tasks)
         .to(include(Rake::Task["leiningen:ensure"]))
   end
 
@@ -67,7 +67,7 @@ describe RakeLeiningen::Tasks::Format do
       subject.define(ensure_task_name: "tools:leiningen:ensure")
     end
 
-    expect(Rake::Task["something:format"].prerequisite_tasks)
+    expect(Rake::Task["something:lint"].prerequisite_tasks)
         .to(include(Rake::Task["tools:leiningen:ensure"]))
   end
 
@@ -78,56 +78,40 @@ describe RakeLeiningen::Tasks::Format do
       subject.define(argument_names: argument_names)
     end
 
-    expect(Rake::Task['something:format'].arg_names)
+    expect(Rake::Task['something:lint'].arg_names)
         .to(eq(argument_names))
   end
 
-  it 'executes cljfmt on invocation' do
+  it 'executes eastwood on invocation' do
     stub_puts
     stub_chdir
 
     expect(RubyLeiningen)
-        .to(receive(:cljfmt)
-            .with(mode: nil, paths: nil, profile: nil))
+        .to(receive(:eastwood)
+            .with(config: nil, profile: nil))
 
     namespace :something do
       subject.define
     end
 
-    Rake::Task["something:format"].invoke
+    Rake::Task["something:lint"].invoke
   end
 
-  it 'uses the provided mode when specified' do
+  it 'uses the provided config when specified' do
     stub_puts
     stub_chdir
 
     expect(RubyLeiningen)
-        .to(receive(:cljfmt)
-            .with(mode: :fix, paths: nil, profile: nil))
-
-    namespace :something do
-      subject.define(mode: :fix)
-    end
-
-    Rake::Task["something:format"].invoke
-  end
-
-  it 'uses the provided paths when specified' do
-    stub_puts
-    stub_chdir
-
-    expect(RubyLeiningen)
-        .to(receive(:cljfmt)
+        .to(receive(:eastwood)
             .with(
-                mode: nil,
-                paths: ["src/", "generated/"],
+                config: "{:namespaces [:source-paths]}",
                 profile: nil))
 
     namespace :something do
-      subject.define(paths: ["src/", "generated/"])
+      subject.define(config: "{:namespaces [:source-paths]}")
     end
 
-    Rake::Task["something:format"].invoke
+    Rake::Task["something:lint"].invoke
   end
 
   it 'uses the provided profile when specified' do
@@ -135,34 +119,33 @@ describe RakeLeiningen::Tasks::Format do
     stub_chdir
 
     expect(RubyLeiningen)
-        .to(receive(:cljfmt)
+        .to(receive(:eastwood)
             .with(
-                mode: nil,
-                paths: nil,
+                config: nil,
                 profile: "test"))
 
     namespace :something do
       subject.define(profile: "test")
     end
 
-    Rake::Task["something:format"].invoke
+    Rake::Task["something:lint"].invoke
   end
 
   it 'changes directory if the directory parameter is specified' do
     stub_puts
-
+    
     directory = "some/other/directory"
 
     expect(Dir).to(receive(:chdir).with(directory).and_yield)
 
     expect(RubyLeiningen)
-        .to(receive(:cljfmt))
+        .to(receive(:eastwood))
 
     namespace :something do
       subject.define(directory: directory)
     end
 
-    Rake::Task["something:format"].invoke
+    Rake::Task["something:lint"].invoke
   end
 
   def stub_chdir

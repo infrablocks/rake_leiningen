@@ -6,16 +6,18 @@ require_relative '../mixins/directoried'
 
 module RakeLeiningen
   module Tasks
-    class Format < RakeFactory::Task
+    class Idiomise < RakeFactory::Task
       include Mixins::Directoried
 
-      default_name :format
-      default_description "Format all clojure files."
+      default_name :idiomise
+      default_description "Transform all clojure files to be more idiomatic."
       default_prerequisites ->(t) {
         t.ensure_task_name ? [t.ensure_task_name] : []
       }
 
-      parameter :mode
+      parameter :replace
+      parameter :interactive
+      parameter :reporter
       parameter :paths
       parameter :profile
 
@@ -24,11 +26,13 @@ module RakeLeiningen
       parameter :ensure_task_name, default: 'leiningen:ensure'
 
       action do |t|
-        puts "Formatting all clojure files..."
+        puts "Making all clojure files more idiomatic..."
 
         in_directory(t.directory) do
-          RubyLeiningen.cljfmt(
-              mode: t.mode,
+          RubyLeiningen.kibit(
+              replace: t.replace,
+              interactive: t.interactive,
+              reporter: t.reporter,
               paths: t.paths,
               profile: t.profile)
         end
