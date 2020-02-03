@@ -34,7 +34,7 @@ describe RakeLeiningen::Tasks::Idiomise do
     expect(Rake::Task.task_defined?("something:kibit")).to(be(true))
   end
 
-  it 'allows multiple lint tasks to be declared' do
+  it 'allows multiple idiomise tasks to be declared' do
     namespace :something1 do
       subject.define
     end
