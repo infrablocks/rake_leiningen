@@ -1,12 +1,13 @@
 require 'rake_dependencies'
 require 'rake_leiningen/version'
+require 'rake_leiningen/tasks'
 
 module RakeLeiningen
   def self.define_installation_tasks(opts = {})
     namespace = opts[:namespace] || :leiningen
     dependency = 'lein'
     version = opts[:version] || '2.9.1'
-    path = opts[:path] || File.join('vendor', 'leiningen')
+    path = opts[:path] || File.join(Dir.pwd, 'vendor', 'leiningen')
     type = :uncompressed
     uri_template = "https://raw.githubusercontent.com/technomancy/" +
         "leiningen/<%= @version %>/bin/lein"
@@ -28,6 +29,10 @@ module RakeLeiningen
       end
 
       return true
+    end
+
+    RubyLeiningen.configure do |c|
+      c.binary = File.join(path, 'bin', 'lein')
     end
 
     RakeDependencies::TaskSets::All.define(

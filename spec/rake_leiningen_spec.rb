@@ -6,6 +6,23 @@ RSpec.describe RakeLeiningen do
   end
 
   context 'define_installation_tasks' do
+    context 'when configuring RubyLeiningen' do
+      it 'sets the binary using a path of `pwd`/vendor/leiningen by default' do
+        RakeLeiningen.define_installation_tasks
+
+        expect(RubyLeiningen.configuration.binary)
+            .to(eq("#{Dir.pwd}/vendor/leiningen/bin/lein"))
+      end
+
+      it 'uses the supplied path when provided' do
+        RakeLeiningen.define_installation_tasks(
+            path: 'tools/lein')
+
+        expect(RubyLeiningen.configuration.binary)
+            .to(eq('tools/lein/bin/lein'))
+      end
+    end
+
     context 'when instantiating RakeDependencies::Tasks::All' do
       it 'sets the namespace to leiningen by default' do
         task_set = RakeLeiningen.define_installation_tasks
@@ -41,7 +58,7 @@ RSpec.describe RakeLeiningen do
       it 'uses a path of vendor/leiningen by default' do
         task_set = RakeLeiningen.define_installation_tasks
 
-        expect(task_set.path).to(eq('vendor/leiningen'))
+        expect(task_set.path).to(eq("#{Dir.pwd}/vendor/leiningen"))
       end
 
       it 'uses the supplied path when provided' do
