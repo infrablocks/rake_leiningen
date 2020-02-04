@@ -8,7 +8,7 @@ RSpec.describe RakeLeiningen do
   context 'define_check_tasks' do
     context 'when instantiating RakeLeiningen::TaskSets::Checks' do
       it 'passes the provided block' do
-        opts = {profile: 'test'}
+        opts = {profile: 'test', fix: true}
 
         block = lambda do |t|
           t.directory = 'my-module'

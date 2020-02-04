@@ -14,6 +14,7 @@ module RakeLeiningen
 
       parameter :profile
       parameter :directory, default: '.'
+      parameter :fix, default: false
 
       parameter :ensure_task_name, default: 'leiningen:ensure'
 
@@ -29,9 +30,11 @@ module RakeLeiningen
       task Tasks::Optimise,
           name: ->(ts) { ts.optimise_task_name }
       task Tasks::Idiomise,
-          name: ->(ts) { ts.idiomise_task_name }
+          name: ->(ts) { ts.idiomise_task_name },
+          replace: ->(ts) { ts.fix }
       task Tasks::Format,
-          name: ->(ts) { ts.format_task_name }
+          name: ->(ts) { ts.format_task_name },
+          mode: ->(ts) { ts.fix ? :fix : :check }
       task Tasks::Pedantise,
           name: ->(ts) { ts.pedantise_task_name }
       task Tasks::Check,

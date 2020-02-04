@@ -117,7 +117,28 @@ describe RakeLeiningen::TaskSets::Checks do
 
       expect(rake_task.creator.profile).to(eq(profile))
       expect(rake_task.creator.directory).to(eq(directory))
+      expect(rake_task.creator.replace).to(be(false))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
+    end
+
+    it 'sets replace to true when the fix parameter is true' do
+      namespace :something do
+        subject.define(fix: true)
+      end
+
+      rake_task = Rake::Task["something:idiomise"]
+
+      expect(rake_task.creator.replace).to(eq(true))
+    end
+
+    it 'sets replace to false when the fix parameter is false' do
+      namespace :something do
+        subject.define(fix: true)
+      end
+
+      rake_task = Rake::Task["something:idiomise"]
+
+      expect(rake_task.creator.replace).to(eq(true))
     end
 
     it 'uses the provided idiomise task name when present' do
@@ -164,6 +185,26 @@ describe RakeLeiningen::TaskSets::Checks do
       expect(rake_task.creator.profile).to(eq(profile))
       expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
+    end
+
+    it 'sets mode to fix when the fix parameter is true' do
+      namespace :something do
+        subject.define(fix: true)
+      end
+
+      rake_task = Rake::Task["something:format"]
+
+      expect(rake_task.creator.mode).to(eq(:fix))
+    end
+
+    it 'sets mode to check when the fix parameter is false' do
+      namespace :something do
+        subject.define(fix: false)
+      end
+
+      rake_task = Rake::Task["something:format"]
+
+      expect(rake_task.creator.mode).to(eq(:check))
     end
 
     it 'uses the provided format task name when present' do
