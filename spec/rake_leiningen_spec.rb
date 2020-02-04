@@ -5,6 +5,26 @@ RSpec.describe RakeLeiningen do
     expect(RakeLeiningen::VERSION).not_to be nil
   end
 
+  context 'define_check_tasks' do
+    context 'when instantiating RakeLeiningen::TaskSets::Checks' do
+      it 'passes the provided block' do
+        opts = {profile: 'test'}
+
+        block = lambda do |t|
+          t.directory = 'my-module'
+        end
+
+        expect(RakeLeiningen::TaskSets::Checks)
+            .to(receive(:define) do |passed_opts, &passed_block|
+              expect(passed_opts).to(eq(opts))
+              expect(passed_block).to(eq(block))
+            end)
+
+        RakeLeiningen.define_check_tasks(opts, &block)
+      end
+    end
+  end
+
   context 'define_installation_tasks' do
     context 'when configuring RubyLeiningen' do
       it 'sets the binary using a path of `pwd`/vendor/leiningen by default' do

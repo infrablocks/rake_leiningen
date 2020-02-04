@@ -4,6 +4,10 @@ require 'rake_leiningen/tasks'
 require 'rake_leiningen/task_sets'
 
 module RakeLeiningen
+  def self.define_check_tasks(opts = {}, &block)
+    RakeLeiningen::TaskSets::Checks.define(opts, &block)
+  end
+
   def self.define_installation_tasks(opts = {})
     namespace = opts[:namespace] || :leiningen
     dependency = 'lein'
