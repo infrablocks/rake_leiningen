@@ -1,6 +1,7 @@
 require 'rake_dependencies'
 require 'rake_leiningen/version'
 require 'rake_leiningen/tasks'
+require 'rake_leiningen/task_sets'
 
 module RakeLeiningen
   def self.define_installation_tasks(opts = {})
