@@ -65,6 +65,26 @@ RSpec.describe RakeLeiningen do
     end
   end
 
+  context 'define_test_task' do
+    context 'when instantiating RakeLeiningen::Tasks::Test' do
+      it 'passes the provided block' do
+        opts = {type: 'unit', profile: 'test'}
+
+        block = lambda do |t|
+          t.files = ['some/file/first.clj', 'some/file/second.clj']
+        end
+
+        expect(RakeLeiningen::Tasks::Test)
+            .to(receive(:define) do |passed_opts, &passed_block|
+              expect(passed_opts).to(eq(opts))
+              expect(passed_block).to(eq(block))
+            end)
+
+        RakeLeiningen.define_test_task(opts, &block)
+      end
+    end
+  end
+
   context 'define_installation_tasks' do
     context 'when configuring RubyLeiningen' do
       it 'sets the binary using a path of `pwd`/vendor/leiningen by default' do

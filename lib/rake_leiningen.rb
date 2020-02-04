@@ -16,6 +16,10 @@ module RakeLeiningen
     RakeLeiningen::Tasks::Start.define(opts, &block)
   end
 
+  def self.define_test_task(opts = {}, &block)
+    RakeLeiningen::Tasks::Test.define(opts, &block)
+  end
+
   def self.define_installation_tasks(opts = {})
     namespace = opts[:namespace] || :leiningen
     dependency = 'lein'
