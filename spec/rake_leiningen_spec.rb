@@ -25,6 +25,26 @@ RSpec.describe RakeLeiningen do
     end
   end
 
+  context 'define_build_task' do
+    context 'when instantiating RakeLeiningen::Tasks::Build' do
+      it 'passes the provided block' do
+        opts = {profile: 'test'}
+
+        block = lambda do |t|
+          t.main_namespace = 'some.namespace'
+        end
+
+        expect(RakeLeiningen::Tasks::Build)
+            .to(receive(:define) do |passed_opts, &passed_block|
+              expect(passed_opts).to(eq(opts))
+              expect(passed_block).to(eq(block))
+            end)
+
+        RakeLeiningen.define_build_task(opts, &block)
+      end
+    end
+  end
+
   context 'define_installation_tasks' do
     context 'when configuring RubyLeiningen' do
       it 'sets the binary using a path of `pwd`/vendor/leiningen by default' do

@@ -8,6 +8,10 @@ module RakeLeiningen
     RakeLeiningen::TaskSets::Checks.define(opts, &block)
   end
 
+  def self.define_build_task(opts = {}, &block)
+    RakeLeiningen::Tasks::Build.define(opts, &block)
+  end
+
   def self.define_installation_tasks(opts = {})
     namespace = opts[:namespace] || :leiningen
     dependency = 'lein'
