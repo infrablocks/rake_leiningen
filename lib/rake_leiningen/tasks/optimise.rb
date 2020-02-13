@@ -11,7 +11,7 @@ module RakeLeiningen
 
       default_name :optimise
       default_description "Warn on reflection for all clojure files."
-      default_prerequisites ->(t) {
+      default_prerequisites RakeFactory::DynamicValue.new { |t|
         t.ensure_task_name ? [t.ensure_task_name] : []
       }
 

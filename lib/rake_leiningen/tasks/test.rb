@@ -10,10 +10,10 @@ module RakeLeiningen
       include Mixins::Directoried
 
       default_name :test
-      default_description ->(t) {
+      default_description RakeFactory::DynamicValue.new { |t|
         "Run #{t.type ? "all #{t.type}" : "all"} tests."
       }
-      default_prerequisites ->(t) {
+      default_prerequisites RakeFactory::DynamicValue.new { |t|
         t.ensure_task_name ? [t.ensure_task_name] : []
       }
 

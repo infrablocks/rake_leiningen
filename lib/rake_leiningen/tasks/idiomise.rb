@@ -11,7 +11,7 @@ module RakeLeiningen
 
       default_name :idiomise
       default_description "Transform all clojure files to be more idiomatic."
-      default_prerequisites ->(t) {
+      default_prerequisites RakeFactory::DynamicValue.new { |t|
         t.ensure_task_name ? [t.ensure_task_name] : []
       }
 

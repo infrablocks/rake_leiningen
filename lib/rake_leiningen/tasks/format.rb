@@ -11,7 +11,7 @@ module RakeLeiningen
 
       default_name :format
       default_description "Format all clojure files."
-      default_prerequisites ->(t) {
+      default_prerequisites RakeFactory::DynamicValue.new { |t|
         t.ensure_task_name ? [t.ensure_task_name] : []
       }
 

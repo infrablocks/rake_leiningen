@@ -11,7 +11,7 @@ module RakeLeiningen
 
       default_name :start
       default_description "Run the application."
-      default_prerequisites ->(t) {
+      default_prerequisites RakeFactory::DynamicValue.new { |t|
         t.ensure_task_name ? [t.ensure_task_name] : []
       }
 

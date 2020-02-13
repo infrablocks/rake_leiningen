@@ -26,19 +26,19 @@ module RakeLeiningen
       parameter :check_task_name, :default => :check
 
       task Tasks::Lint,
-          name: ->(ts) { ts.lint_task_name }
+          name: RakeFactory::DynamicValue.new { |ts| ts.lint_task_name }
       task Tasks::Optimise,
-          name: ->(ts) { ts.optimise_task_name }
+          name: RakeFactory::DynamicValue.new { |ts| ts.optimise_task_name }
       task Tasks::Idiomise,
-          name: ->(ts) { ts.idiomise_task_name },
-          replace: ->(ts) { ts.fix }
+          name: RakeFactory::DynamicValue.new { |ts| ts.idiomise_task_name },
+          replace: RakeFactory::DynamicValue.new { |ts| ts.fix }
       task Tasks::Format,
-          name: ->(ts) { ts.format_task_name },
-          mode: ->(ts) { ts.fix ? :fix : :check }
+          name: RakeFactory::DynamicValue.new { |ts| ts.format_task_name },
+          mode: RakeFactory::DynamicValue.new { |ts| ts.fix ? :fix : :check }
       task Tasks::Pedantise,
-          name: ->(ts) { ts.pedantise_task_name }
+          name: RakeFactory::DynamicValue.new { |ts| ts.pedantise_task_name }
       task Tasks::Check,
-          name: ->(ts) { ts.check_task_name }
+          name: RakeFactory::DynamicValue.new { |ts| ts.check_task_name }
     end
   end
 end

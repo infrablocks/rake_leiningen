@@ -11,7 +11,7 @@ module RakeLeiningen
 
       default_name :check
       default_description "Perform all checks against clojure files."
-      default_prerequisites ->(t) {
+      default_prerequisites RakeFactory::DynamicValue.new { |t|
         [
             t.lint_task_name,
             t.optimise_task_name,
