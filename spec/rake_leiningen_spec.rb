@@ -45,6 +45,26 @@ RSpec.describe RakeLeiningen do
     end
   end
 
+  context 'define_release_task' do
+    context 'when instantiating RakeLeiningen::Tasks::Release' do
+      it 'passes the provided block' do
+        opts = {profile: 'pre'}
+
+        block = lambda do |t|
+          t.level = ':rc'
+        end
+
+        expect(RakeLeiningen::Tasks::Release)
+            .to(receive(:define) do |passed_opts, &passed_block|
+              expect(passed_opts).to(eq(opts))
+              expect(passed_block).to(eq(block))
+            end)
+
+        RakeLeiningen.define_release_task(opts, &block)
+      end
+    end
+  end
+
   context 'define_start_task' do
     context 'when instantiating RakeLeiningen::Tasks::Start' do
       it 'passes the provided block' do
