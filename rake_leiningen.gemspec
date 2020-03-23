@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary = 'Rake tasks for interoperating with a leiningen project.'
   spec.description = 'Rake tasks for common leiningen commands allowing ' +
       'a leiningen project to be managed as part of a build.'
-  spec.homepage = "https://github.com/logicblocks/rake_leiningen"
+  spec.homepage = "https://github.com/infrablocks/rake_leiningen"
   spec.license = 'MIT'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
