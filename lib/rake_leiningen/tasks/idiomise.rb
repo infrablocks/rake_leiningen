@@ -20,6 +20,7 @@ module RakeLeiningen
       parameter :reporter
       parameter :paths
       parameter :profile
+      parameter :environment
 
       parameter :directory, default: '.'
 
@@ -34,7 +35,8 @@ module RakeLeiningen
               interactive: t.interactive,
               reporter: t.reporter,
               paths: t.paths,
-              profile: t.profile)
+              profile: t.profile,
+              environment: t.environment)
         end
       end
     end

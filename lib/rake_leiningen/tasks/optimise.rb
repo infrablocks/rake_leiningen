@@ -16,6 +16,7 @@ module RakeLeiningen
       }
 
       parameter :profile
+      parameter :environment
 
       parameter :directory, default: '.'
 
@@ -26,7 +27,8 @@ module RakeLeiningen
 
         in_directory(t.directory) do
           RubyLeiningen.check(
-              profile: t.profile)
+              profile: t.profile,
+              environment: t.environment)
         end
       end
     end

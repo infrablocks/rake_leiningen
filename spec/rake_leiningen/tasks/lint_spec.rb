@@ -88,7 +88,10 @@ describe RakeLeiningen::Tasks::Lint do
 
     expect(RubyLeiningen)
         .to(receive(:eastwood)
-            .with(config: nil, profile: nil))
+            .with(
+                config: nil,
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -105,7 +108,8 @@ describe RakeLeiningen::Tasks::Lint do
         .to(receive(:eastwood)
             .with(
                 config: "{:namespaces [:source-paths]}",
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(config: "{:namespaces [:source-paths]}")
@@ -122,10 +126,29 @@ describe RakeLeiningen::Tasks::Lint do
         .to(receive(:eastwood)
             .with(
                 config: nil,
-                profile: "test"))
+                profile: "test",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "test")
+    end
+
+    Rake::Task["something:lint"].invoke
+  end
+
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:eastwood)
+            .with(
+                config: nil,
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
     end
 
     Rake::Task["something:lint"].invoke

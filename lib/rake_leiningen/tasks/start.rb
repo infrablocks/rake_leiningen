@@ -19,6 +19,7 @@ module RakeLeiningen
       parameter :arguments
       parameter :quote_arguments
       parameter :profile
+      parameter :environment
 
       parameter :directory, default: '.'
 
@@ -32,7 +33,8 @@ module RakeLeiningen
               main_function: t.main_function,
               arguments: t.arguments,
               quote_arguments: t.quote_arguments,
-              profile: t.profile)
+              profile: t.profile,
+              environment: t.environment)
         end
       end
     end

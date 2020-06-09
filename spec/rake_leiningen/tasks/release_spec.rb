@@ -88,7 +88,10 @@ describe RakeLeiningen::Tasks::Release do
 
     expect(RubyLeiningen)
         .to(receive(:release)
-            .with(level: nil, profile: nil))
+            .with(
+                level: nil,
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -105,7 +108,8 @@ describe RakeLeiningen::Tasks::Release do
         .to(receive(:release)
             .with(
                 level: ':patch',
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(level: ':patch')
@@ -122,10 +126,29 @@ describe RakeLeiningen::Tasks::Release do
         .to(receive(:release)
             .with(
                 level: nil,
-                profile: "pre"))
+                profile: "pre",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "pre")
+    end
+
+    Rake::Task["something:release"].invoke
+  end
+
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:release)
+            .with(
+                level: nil,
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
     end
 
     Rake::Task["something:release"].invoke

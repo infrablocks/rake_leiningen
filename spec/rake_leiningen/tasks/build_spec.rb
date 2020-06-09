@@ -88,7 +88,10 @@ describe RakeLeiningen::Tasks::Build do
 
     expect(RubyLeiningen)
         .to(receive(:uberjar)
-            .with(main_namespace: nil, profile: nil))
+            .with(
+                main_namespace: nil,
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -105,7 +108,8 @@ describe RakeLeiningen::Tasks::Build do
         .to(receive(:uberjar)
             .with(
                 main_namespace: 'some.namespace',
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(main_namespace: 'some.namespace')
@@ -122,10 +126,29 @@ describe RakeLeiningen::Tasks::Build do
         .to(receive(:uberjar)
             .with(
                 main_namespace: nil,
-                profile: "test"))
+                profile: "test",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "test")
+    end
+
+    Rake::Task["something:build"].invoke
+  end
+
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:uberjar)
+            .with(
+                main_namespace: nil,
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
     end
 
     Rake::Task["something:build"].invoke

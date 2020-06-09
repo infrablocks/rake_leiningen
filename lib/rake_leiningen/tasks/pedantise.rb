@@ -26,6 +26,7 @@ module RakeLeiningen
       parameter :name_collisions
       parameter :exclude_profiles
       parameter :profile
+      parameter :environment
 
       parameter :directory, default: '.'
 
@@ -46,7 +47,8 @@ module RakeLeiningen
               docstrings: t.docstrings,
               name_collisions: t.name_collisions,
               exclude_profiles: t.exclude_profiles,
-              profile: t.profile)
+              profile: t.profile,
+              environment: t.environment)
         end
       end
     end

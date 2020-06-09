@@ -93,7 +93,8 @@ describe RakeLeiningen::Tasks::Idiomise do
                 interactive: nil,
                 reporter: nil,
                 paths: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -113,7 +114,8 @@ describe RakeLeiningen::Tasks::Idiomise do
                 interactive: nil,
                 reporter: nil,
                 paths: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(replace: true)
@@ -133,7 +135,8 @@ describe RakeLeiningen::Tasks::Idiomise do
                 interactive: true,
                 reporter: nil,
                 paths: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(interactive: true)
@@ -153,7 +156,8 @@ describe RakeLeiningen::Tasks::Idiomise do
                 interactive: nil,
                 reporter: "markdown",
                 paths: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(reporter: "markdown")
@@ -173,7 +177,8 @@ describe RakeLeiningen::Tasks::Idiomise do
                 interactive: nil,
                 reporter: nil,
                 paths: ["path/to/src/clj/", "path/to/src/cljs/util.cljs"],
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(paths: ["path/to/src/clj/", "path/to/src/cljs/util.cljs"])
@@ -193,10 +198,32 @@ describe RakeLeiningen::Tasks::Idiomise do
                 interactive: nil,
                 reporter: nil,
                 paths: nil,
-                profile: "test"))
+                profile: "test",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "test")
+    end
+
+    Rake::Task["something:idiomise"].invoke
+  end
+
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:kibit)
+            .with(
+                replace: nil,
+                interactive: nil,
+                reporter: nil,
+                paths: nil,
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
     end
 
     Rake::Task["something:idiomise"].invoke

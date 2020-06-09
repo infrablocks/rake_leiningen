@@ -18,6 +18,7 @@ module RakeLeiningen
       parameter :mode
       parameter :paths
       parameter :profile
+      parameter :environment
 
       parameter :directory, default: '.'
 
@@ -30,7 +31,8 @@ module RakeLeiningen
           RubyLeiningen.cljfmt(
               mode: t.mode,
               paths: t.paths,
-              profile: t.profile)
+              profile: t.profile,
+              environment: t.environment)
         end
       end
     end

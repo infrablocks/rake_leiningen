@@ -17,6 +17,7 @@ module RakeLeiningen
 
       parameter :main_namespace
       parameter :profile
+      parameter :environment
 
       parameter :directory, default: '.'
 
@@ -28,7 +29,8 @@ module RakeLeiningen
         in_directory(t.directory) do
           RubyLeiningen.uberjar(
               main_namespace: t.main_namespace,
-              profile: t.profile)
+              profile: t.profile,
+              environment: t.environment)
         end
       end
     end

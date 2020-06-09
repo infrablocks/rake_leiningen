@@ -24,6 +24,7 @@ module RakeLeiningen
       parameter :namespaces
       parameter :files
       parameter :profile
+      parameter :environment
 
       parameter :directory, default: '.'
 
@@ -38,7 +39,8 @@ module RakeLeiningen
               test_selectors: t.test_selectors,
               namespaces: t.namespaces,
               files: t.files,
-              profile: t.profile)
+              profile: t.profile,
+              environment: t.environment)
         end
       end
     end

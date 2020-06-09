@@ -102,7 +102,8 @@ describe RakeLeiningen::Tasks::Test do
                 test_selectors: nil,
                 namespaces: nil,
                 files: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -122,7 +123,8 @@ describe RakeLeiningen::Tasks::Test do
                 test_selectors: nil,
                 namespaces: nil,
                 files: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(only: 'some.namespace/test-something')
@@ -142,7 +144,8 @@ describe RakeLeiningen::Tasks::Test do
                 test_selectors: [:unit, :integration],
                 namespaces: nil,
                 files: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(test_selectors: [:unit, :integration])
@@ -162,7 +165,8 @@ describe RakeLeiningen::Tasks::Test do
                 test_selectors: nil,
                 namespaces: ["mylib.core", "mylib.helpers"],
                 files: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(namespaces: ["mylib.core", "mylib.helpers"])
@@ -182,7 +186,8 @@ describe RakeLeiningen::Tasks::Test do
                 test_selectors: nil,
                 namespaces: nil,
                 files: ["src/mylib/core.clj", "src/mylib/helpers.clj"],
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(files: ["src/mylib/core.clj", "src/mylib/helpers.clj"])
@@ -202,10 +207,32 @@ describe RakeLeiningen::Tasks::Test do
                 test_selectors: nil,
                 namespaces: nil,
                 files: nil,
-                profile: "test"))
+                profile: "test",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "test")
+    end
+
+    Rake::Task["something:test"].invoke
+  end
+
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:eftest)
+            .with(
+                only: nil,
+                test_selectors: nil,
+                namespaces: nil,
+                files: nil,
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
     end
 
     Rake::Task["something:test"].invoke

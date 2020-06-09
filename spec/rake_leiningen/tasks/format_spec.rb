@@ -88,7 +88,11 @@ describe RakeLeiningen::Tasks::Format do
 
     expect(RubyLeiningen)
         .to(receive(:cljfmt)
-            .with(mode: nil, paths: nil, profile: nil))
+            .with(
+                mode: nil,
+                paths: nil,
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -103,7 +107,11 @@ describe RakeLeiningen::Tasks::Format do
 
     expect(RubyLeiningen)
         .to(receive(:cljfmt)
-            .with(mode: :fix, paths: nil, profile: nil))
+            .with(
+                mode: :fix,
+                paths: nil,
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(mode: :fix)
@@ -121,7 +129,8 @@ describe RakeLeiningen::Tasks::Format do
             .with(
                 mode: nil,
                 paths: ["src/", "generated/"],
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(paths: ["src/", "generated/"])
@@ -139,10 +148,30 @@ describe RakeLeiningen::Tasks::Format do
             .with(
                 mode: nil,
                 paths: nil,
-                profile: "test"))
+                profile: "test",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "test")
+    end
+
+    Rake::Task["something:format"].invoke
+  end
+
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:cljfmt)
+            .with(
+                mode: nil,
+                paths: nil,
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
     end
 
     Rake::Task["something:format"].invoke

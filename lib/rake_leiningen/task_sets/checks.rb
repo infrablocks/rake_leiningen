@@ -13,6 +13,7 @@ module RakeLeiningen
       parameter :argument_names, default: []
 
       parameter :profile
+      parameter :environment
       parameter :directory, default: '.'
       parameter :fix, default: false
 

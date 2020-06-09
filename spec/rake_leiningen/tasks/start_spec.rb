@@ -92,7 +92,8 @@ describe RakeLeiningen::Tasks::Start do
                 main_function: nil,
                 arguments: nil,
                 quote_arguments: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -111,7 +112,8 @@ describe RakeLeiningen::Tasks::Start do
                 main_function: 'some.namespace/main',
                 arguments: nil,
                 quote_arguments: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(main_function: 'some.namespace/main')
@@ -131,7 +133,8 @@ describe RakeLeiningen::Tasks::Start do
                 main_function: nil,
                 arguments: ['first', 'second'],
                 quote_arguments: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(arguments: ['first', 'second'])
@@ -150,10 +153,31 @@ describe RakeLeiningen::Tasks::Start do
                 main_function: nil,
                 arguments: nil,
                 quote_arguments: nil,
-                profile: "test"))
+                profile: "test",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "test")
+    end
+
+    Rake::Task["something:start"].invoke
+  end
+
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:run)
+            .with(
+                main_function: nil,
+                arguments: nil,
+                quote_arguments: nil,
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
     end
 
     Rake::Task["something:start"].invoke

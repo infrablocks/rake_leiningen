@@ -99,7 +99,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -125,7 +126,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(show_help: true)
@@ -151,7 +153,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(verbose: true)
@@ -177,7 +180,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(maximum_line_length: 120)
@@ -203,7 +207,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(long_lines: true)
@@ -229,7 +234,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(trailing_whitespace: true)
@@ -255,7 +261,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(trailing_blank_lines: true)
@@ -281,7 +288,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(var_redefs: true)
@@ -307,7 +315,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: true,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(docstrings: true)
@@ -333,7 +342,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: true,
                 exclude_profiles: nil,
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(name_collisions: true)
@@ -359,7 +369,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: ["test"],
-                profile: nil))
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define(exclude_profiles: ["test"])
@@ -385,7 +396,8 @@ describe RakeLeiningen::Tasks::Pedantise do
                 docstrings: nil,
                 name_collisions: nil,
                 exclude_profiles: nil,
-                profile: "test"))
+                profile: "test",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "test")
@@ -394,9 +406,36 @@ describe RakeLeiningen::Tasks::Pedantise do
     Rake::Task["something:pedantise"].invoke
   end
 
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:bikeshed)
+            .with(
+                show_help: nil,
+                verbose: nil,
+                maximum_line_length: nil,
+                long_lines: nil,
+                trailing_whitespace: nil,
+                trailing_blank_lines: nil,
+                var_redefs: nil,
+                docstrings: nil,
+                name_collisions: nil,
+                exclude_profiles: nil,
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
+    end
+
+    Rake::Task["something:pedantise"].invoke
+  end
+
   it 'changes directory if the directory parameter is specified' do
     stub_puts
-    
+
     directory = "some/other/directory"
 
     expect(Dir).to(receive(:chdir).with(directory).and_yield)

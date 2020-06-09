@@ -6,6 +6,7 @@ describe RakeLeiningen::TaskSets::Checks do
   context 'lint task' do
     it 'configures with passed parameters' do
       profile = 'test'
+      environment = {"VAR" => "val"}
       directory = 'module1'
       ensure_task_name = 'lein:ensure'
 
@@ -16,6 +17,7 @@ describe RakeLeiningen::TaskSets::Checks do
       namespace :something do
         subject.define(
             profile: profile,
+            environment: environment,
             directory: directory,
             ensure_task_name: ensure_task_name)
       end
@@ -23,6 +25,7 @@ describe RakeLeiningen::TaskSets::Checks do
       rake_task = Rake::Task["something:lint"]
 
       expect(rake_task.creator.profile).to(eq(profile))
+      expect(rake_task.creator.environment).to(eq(environment))
       expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
     end
@@ -52,6 +55,7 @@ describe RakeLeiningen::TaskSets::Checks do
   context 'optimise task' do
     it 'configures with passed parameters' do
       profile = 'test'
+      environment = {"VAR" => "val"}
       directory = 'module1'
       ensure_task_name = 'lein:ensure'
 
@@ -62,6 +66,7 @@ describe RakeLeiningen::TaskSets::Checks do
       namespace :something do
         subject.define(
             profile: profile,
+            environment: environment,
             directory: directory,
             ensure_task_name: ensure_task_name)
       end
@@ -69,6 +74,7 @@ describe RakeLeiningen::TaskSets::Checks do
       rake_task = Rake::Task["something:optimise"]
 
       expect(rake_task.creator.profile).to(eq(profile))
+      expect(rake_task.creator.environment).to(eq(environment))
       expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
     end
@@ -99,6 +105,7 @@ describe RakeLeiningen::TaskSets::Checks do
   context 'idiomise task' do
     it 'configures with passed parameters' do
       profile = 'test'
+      environment = {"VAR" => "val"}
       directory = 'module1'
       ensure_task_name = 'lein:ensure'
 
@@ -109,6 +116,7 @@ describe RakeLeiningen::TaskSets::Checks do
       namespace :something do
         subject.define(
             profile: profile,
+            environment: environment,
             directory: directory,
             ensure_task_name: ensure_task_name)
       end
@@ -116,6 +124,7 @@ describe RakeLeiningen::TaskSets::Checks do
       rake_task = Rake::Task["something:idiomise"]
 
       expect(rake_task.creator.profile).to(eq(profile))
+      expect(rake_task.creator.environment).to(eq(environment))
       expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.replace).to(be(false))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
@@ -166,6 +175,7 @@ describe RakeLeiningen::TaskSets::Checks do
   context 'format task' do
     it 'configures with passed parameters' do
       profile = 'test'
+      environment = {"VAR" => "val"}
       directory = 'module1'
       ensure_task_name = 'lein:ensure'
 
@@ -176,6 +186,7 @@ describe RakeLeiningen::TaskSets::Checks do
       namespace :something do
         subject.define(
             profile: profile,
+            environment: environment,
             directory: directory,
             ensure_task_name: ensure_task_name)
       end
@@ -183,6 +194,7 @@ describe RakeLeiningen::TaskSets::Checks do
       rake_task = Rake::Task["something:format"]
 
       expect(rake_task.creator.profile).to(eq(profile))
+      expect(rake_task.creator.environment).to(eq(environment))
       expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
     end
@@ -232,6 +244,7 @@ describe RakeLeiningen::TaskSets::Checks do
   context 'pedantise task' do
     it 'configures with passed parameters' do
       profile = 'test'
+      environment = {"VAR" => "val"}
       directory = 'module1'
       ensure_task_name = 'lein:ensure'
 
@@ -242,6 +255,7 @@ describe RakeLeiningen::TaskSets::Checks do
       namespace :something do
         subject.define(
             profile: profile,
+            environment: environment,
             directory: directory,
             ensure_task_name: ensure_task_name)
       end
@@ -249,6 +263,7 @@ describe RakeLeiningen::TaskSets::Checks do
       rake_task = Rake::Task["something:pedantise"]
 
       expect(rake_task.creator.profile).to(eq(profile))
+      expect(rake_task.creator.environment).to(eq(environment))
       expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
     end

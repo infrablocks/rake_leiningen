@@ -88,7 +88,9 @@ describe RakeLeiningen::Tasks::Optimise do
 
     expect(RubyLeiningen)
         .to(receive(:check)
-            .with(profile: nil))
+            .with(
+                profile: nil,
+                environment: nil))
 
     namespace :something do
       subject.define
@@ -104,10 +106,28 @@ describe RakeLeiningen::Tasks::Optimise do
     expect(RubyLeiningen)
         .to(receive(:check)
             .with(
-                profile: "test"))
+                profile: "test",
+                environment: nil))
 
     namespace :something do
       subject.define(profile: "test")
+    end
+
+    Rake::Task["something:optimise"].invoke
+  end
+
+  it 'uses the provided environment when specified' do
+    stub_puts
+    stub_chdir
+
+    expect(RubyLeiningen)
+        .to(receive(:check)
+            .with(
+                profile: nil,
+                environment: {"VAR" => "val"}))
+
+    namespace :something do
+      subject.define(environment: {"VAR" => "val"})
     end
 
     Rake::Task["something:optimise"].invoke
