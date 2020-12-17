@@ -6,6 +6,7 @@ require_relative '../tasks/idiomise'
 require_relative '../tasks/format'
 require_relative '../tasks/pedantise'
 require_relative '../tasks/check'
+require_relative '../tasks/style'
 
 module RakeLeiningen
   module TaskSets
