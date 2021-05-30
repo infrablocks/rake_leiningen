@@ -6,8 +6,8 @@ require 'rake_leiningen/version'
 Gem::Specification.new do |spec|
   spec.name = 'rake_leiningen'
   spec.version = RakeLeiningen::VERSION
-  spec.authors = ['Toby Clemson']
-  spec.email = ['tobyclemson@gmail.com']
+  spec.authors = ['InfraBlocks Maintainers']
+  spec.email = ['maintainers@infrablocks.io']
 
   spec.summary = 'Rake tasks for interoperating with a leiningen project.'
   spec.description = 'Rake tasks for common leiningen commands allowing ' +
