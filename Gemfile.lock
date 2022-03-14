@@ -10,12 +10,11 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.5)
+    activesupport (7.0.2.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-      zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     colored2 (3.1.2)
@@ -105,9 +104,9 @@ GEM
     ruby2_keywords (0.0.5)
     ruby_gpg2 (0.8.0)
       lino (>= 1.5)
-    ruby_leiningen (0.23.0)
-      activesupport (~> 6.0, >= 6.0.2)
-      lino (>= 1.5)
+    ruby_leiningen (0.24.0.pre.4)
+      activesupport (>= 6.0.2, < 8)
+      lino (~> 3.0)
     rubyzip (2.3.2)
     sawyer (0.8.2)
       addressable (>= 2.3.5)
@@ -122,7 +121,6 @@ GEM
     sshkey (2.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    zeitwerk (2.5.4)
 
 PLATFORMS
   ruby
