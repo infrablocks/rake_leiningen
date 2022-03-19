@@ -1,3 +1,3 @@
 module RakeLeiningen
-  VERSION = '0.31.0.pre.4'
+  VERSION = '0.32.0'
 end
