@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rake_leiningen (0.33.0.pre.2)
+    rake_leiningen (0.33.0.pre.3)
       rake_dependencies (~> 3.1)
       rake_factory (~> 0.23)
       ruby_leiningen (~> 0.21)
@@ -169,4 +169,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   2.3.9
+   2.3.11
