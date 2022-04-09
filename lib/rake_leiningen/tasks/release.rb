@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake_factory'
 require 'ruby_leiningen'
 require 'ruby_leiningen/plugins'
@@ -10,10 +12,10 @@ module RakeLeiningen
       include Mixins::Directoried
 
       default_name :release
-      default_description "Release library."
-      default_prerequisites RakeFactory::DynamicValue.new { |t|
+      default_description 'Release library.'
+      default_prerequisites(RakeFactory::DynamicValue.new do |t|
         t.ensure_task_name ? [t.ensure_task_name] : []
-      }
+      end)
 
       parameter :level
       parameter :profile
@@ -24,13 +26,14 @@ module RakeLeiningen
       parameter :ensure_task_name, default: 'leiningen:ensure'
 
       action do |t|
-        puts "Releasing library..."
+        $stdout.puts 'Releasing library...'
 
         in_directory(t.directory) do
           RubyLeiningen.release(
-              level: t.level,
-              profile: t.profile,
-              environment: t.environment)
+            level: t.level,
+            profile: t.profile,
+            environment: t.environment
+          )
         end
       end
     end

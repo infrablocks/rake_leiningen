@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'tasks/lint'
 require_relative 'tasks/optimise'
 require_relative 'tasks/idiomise'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake_dependencies'
 require 'rake_leiningen/version'
 require 'rake_leiningen/tasks'
@@ -25,45 +27,87 @@ module RakeLeiningen
   end
 
   def self.define_installation_tasks(opts = {})
-    namespace = opts[:namespace] || :leiningen
-    dependency = 'lein'
-    version = opts[:version] || '2.9.1'
-    path = opts[:path] || File.join(Dir.pwd, 'vendor', 'leiningen')
-    type = :uncompressed
-    uri_template = "https://raw.githubusercontent.com/technomancy/" +
-        "leiningen/<%= @version %>/bin/lein"
-    file_name_template = "lein"
-
-    needs_fetch_checker = lambda do |t|
-      binary = File.join(t.path, t.binary_directory, 'lein')
-      version_string = StringIO.new
-
-      if File.exist?(binary)
-        Lino::CommandLineBuilder.for_command(binary)
-            .with_flag('-version')
-            .build
-            .execute(stdout: version_string)
-
-        if version_string.string.lines.first =~ /#{version}/
-          return false
-        end
-      end
-
-      return true
-    end
-
     RubyLeiningen.configure do |c|
-      c.binary = File.join(path, 'bin', 'lein')
+      c.binary = leiningen_binary_path(opts)
     end
 
     RakeDependencies::TaskSets::All.define(
-        namespace: namespace,
-        dependency: dependency,
-        version: version,
-        path: path,
-        type: type,
-        uri_template: uri_template,
-        file_name_template: file_name_template,
-        needs_fetch: needs_fetch_checker)
+      installation_task_set_options(opts)
+    )
+  end
+
+  class << self
+    private
+
+    def installation_task_set_options(opts)
+      {
+        namespace: namespace(opts),
+        dependency: dependency(opts),
+        version: version(opts),
+        path: path(opts),
+        type: type(opts),
+        uri_template: uri_template(opts),
+        file_name_template: file_name_template(opts),
+        needs_fetch: needs_fetch_check_function(opts)
+      }
+    end
+
+    def leiningen_binary_path(opts)
+      File.join(path(opts), 'bin', 'lein')
+    end
+
+    def namespace(opts)
+      opts[:namespace] || :leiningen
+    end
+
+    def dependency(_)
+      'lein'
+    end
+
+    def version(opts)
+      opts[:version] || '2.9.1'
+    end
+
+    def path(opts)
+      opts[:path] || File.join(Dir.pwd, 'vendor', 'leiningen')
+    end
+
+    def type(_)
+      :uncompressed
+    end
+
+    def uri_template(_)
+      'https://raw.githubusercontent.com/technomancy/' \
+        'leiningen/<%= @version %>/bin/lein'
+    end
+
+    def file_name_template(_)
+      'lein'
+    end
+
+    def needs_fetch_check_function(opts)
+      lambda do |t|
+        binary = File.join(t.path, t.binary_directory, 'lein')
+
+        if File.exist?(binary) && get_version(binary) =~ /#{version(opts)}/
+          return false
+        end
+
+        return true
+      end
+    end
+
+    def get_version(binary)
+      version_string = StringIO.new
+      version_command(binary).execute(stdout: version_string)
+      version_string.string.lines.first
+    end
+
+    def version_command(binary)
+      Lino::CommandLineBuilder
+        .for_command(binary)
+        .with_flag('-version')
+        .build
+    end
   end
 end

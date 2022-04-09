@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake_factory'
 require 'ruby_leiningen'
 require 'ruby_leiningen/plugins'
@@ -10,16 +12,16 @@ module RakeLeiningen
       include Mixins::Directoried
 
       default_name :check
-      default_description "Perform all checks against clojure files."
-      default_prerequisites RakeFactory::DynamicValue.new { |t|
+      default_description 'Perform all checks against clojure files.'
+      default_prerequisites(RakeFactory::DynamicValue.new do |t|
         [
-            t.lint_task_name,
-            t.optimise_task_name,
-            t.idiomise_task_name,
-            t.format_task_name,
-            t.pedantise_task_name
+          t.lint_task_name,
+          t.optimise_task_name,
+          t.idiomise_task_name,
+          t.format_task_name,
+          t.pedantise_task_name
         ]
-      }
+      end)
 
       parameter :lint_task_name, default: :lint
       parameter :optimise_task_name, default: :optimise

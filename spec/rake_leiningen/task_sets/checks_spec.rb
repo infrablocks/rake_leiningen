@@ -1,13 +1,54 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe RakeLeiningen::TaskSets::Checks do
-  include_context :rake
+  include_context 'rake'
 
-  context 'lint task' do
-    it 'configures with passed parameters' do
+  describe 'lint task' do
+    it 'configures with passed profile' do
       profile = 'test'
-      environment = {"VAR" => "val"}
+
+      namespace :something do
+        described_class.define(
+          profile: profile
+        )
+      end
+
+      rake_task = Rake::Task['something:lint']
+
+      expect(rake_task.creator.profile).to(eq(profile))
+    end
+
+    it 'configures with passed environment' do
+      environment = { 'VAR' => 'val' }
+
+      namespace :something do
+        described_class.define(
+          environment: environment
+        )
+      end
+
+      rake_task = Rake::Task['something:lint']
+
+      expect(rake_task.creator.environment).to(eq(environment))
+    end
+
+    it 'configures with passed directory' do
       directory = 'module1'
+
+      namespace :something do
+        described_class.define(
+          directory: directory
+        )
+      end
+
+      rake_task = Rake::Task['something:lint']
+
+      expect(rake_task.creator.directory).to(eq(directory))
+    end
+
+    it 'configures with passed ensure task name' do
       ensure_task_name = 'lein:ensure'
 
       namespace :lein do
@@ -15,48 +56,84 @@ describe RakeLeiningen::TaskSets::Checks do
       end
 
       namespace :something do
-        subject.define(
-            profile: profile,
-            environment: environment,
-            directory: directory,
-            ensure_task_name: ensure_task_name)
+        described_class.define(
+          ensure_task_name: ensure_task_name
+        )
       end
 
-      rake_task = Rake::Task["something:lint"]
+      rake_task = Rake::Task['something:lint']
 
-      expect(rake_task.creator.profile).to(eq(profile))
-      expect(rake_task.creator.environment).to(eq(environment))
-      expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
     end
 
     it 'uses the provided lint task name when present' do
       namespace :something do
-        subject.define(lint_task_name: :eastwood)
+        described_class.define(lint_task_name: :eastwood)
       end
 
-      expect(Rake::Task.task_defined?("something:eastwood")).to(be(true))
+      expect(Rake.application)
+        .to(have_task_defined('something:eastwood'))
     end
 
     it 'uses the provided argument names when present' do
-      argument_names = [:argument, :names]
+      argument_names = %i[argument names]
 
       namespace :something do
-        subject.define(
-            argument_names: argument_names)
+        described_class.define(
+          argument_names: argument_names
+        )
       end
 
-      rake_task = Rake::Task["something:lint"]
+      rake_task = Rake::Task['something:lint']
 
       expect(rake_task.arg_names).to(eq(argument_names))
     end
   end
 
-  context 'optimise task' do
-    it 'configures with passed parameters' do
+  describe 'optimise task' do
+    it 'configures with passed profile' do
       profile = 'test'
-      environment = {"VAR" => "val"}
+
+      namespace :something do
+        described_class.define(
+          profile: profile
+        )
+      end
+
+      rake_task = Rake::Task['something:optimise']
+
+      expect(rake_task.creator.profile).to(eq(profile))
+    end
+
+    it 'configures with passed environment' do
+      environment = { 'VAR' => 'val' }
+
+      namespace :something do
+        described_class.define(
+          environment: environment
+        )
+      end
+
+      rake_task = Rake::Task['something:optimise']
+
+      expect(rake_task.creator.environment).to(eq(environment))
+    end
+
+    it 'configures with passed directory' do
       directory = 'module1'
+
+      namespace :something do
+        described_class.define(
+          directory: directory
+        )
+      end
+
+      rake_task = Rake::Task['something:optimise']
+
+      expect(rake_task.creator.directory).to(eq(directory))
+    end
+
+    it 'configures with passed ensure task name' do
       ensure_task_name = 'lein:ensure'
 
       namespace :lein do
@@ -64,119 +141,199 @@ describe RakeLeiningen::TaskSets::Checks do
       end
 
       namespace :something do
-        subject.define(
-            profile: profile,
-            environment: environment,
-            directory: directory,
-            ensure_task_name: ensure_task_name)
+        described_class.define(
+          ensure_task_name: ensure_task_name
+        )
       end
 
-      rake_task = Rake::Task["something:optimise"]
+      rake_task = Rake::Task['something:optimise']
 
-      expect(rake_task.creator.profile).to(eq(profile))
-      expect(rake_task.creator.environment).to(eq(environment))
-      expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
     end
 
     it 'uses the provided optimise task name when present' do
       namespace :something do
-        subject.define(optimise_task_name: :check_reflection)
+        described_class.define(optimise_task_name: :check_reflection)
       end
 
-      expect(Rake::Task.task_defined?("something:check_reflection"))
-          .to(be(true))
+      expect(Rake.application)
+        .to(have_task_defined('something:check_reflection'))
     end
 
     it 'uses the provided argument names when present' do
-      argument_names = [:argument, :names]
+      argument_names = %i[argument names]
 
       namespace :something do
-        subject.define(
-            argument_names: argument_names)
+        described_class.define(
+          argument_names: argument_names
+        )
       end
 
-      rake_task = Rake::Task["something:optimise"]
+      rake_task = Rake::Task['something:optimise']
 
       expect(rake_task.arg_names).to(eq(argument_names))
     end
   end
 
-  context 'idiomise task' do
-    it 'configures with passed parameters' do
+  describe 'idiomise task' do
+    it 'configures with passed profile' do
       profile = 'test'
-      environment = {"VAR" => "val"}
-      directory = 'module1'
-      ensure_task_name = 'lein:ensure'
 
       namespace :lein do
         task :ensure
       end
 
       namespace :something do
-        subject.define(
-            profile: profile,
-            environment: environment,
-            directory: directory,
-            ensure_task_name: ensure_task_name)
+        described_class.define(
+          profile: profile
+        )
       end
 
-      rake_task = Rake::Task["something:idiomise"]
+      rake_task = Rake::Task['something:idiomise']
 
       expect(rake_task.creator.profile).to(eq(profile))
+    end
+
+    it 'configures with passed environment' do
+      environment = { 'VAR' => 'val' }
+
+      namespace :something do
+        described_class.define(
+          environment: environment
+        )
+      end
+
+      rake_task = Rake::Task['something:idiomise']
+
       expect(rake_task.creator.environment).to(eq(environment))
+    end
+
+    it 'configures with passed directory' do
+      directory = 'module1'
+
+      namespace :something do
+        described_class.define(
+          directory: directory
+        )
+      end
+
+      rake_task = Rake::Task['something:idiomise']
+
       expect(rake_task.creator.directory).to(eq(directory))
-      expect(rake_task.creator.replace).to(be(false))
+    end
+
+    it 'configures with passed ensure task name' do
+      ensure_task_name = 'lein:ensure'
+
+      namespace :something do
+        described_class.define(
+          ensure_task_name: ensure_task_name
+        )
+      end
+
+      rake_task = Rake::Task['something:idiomise']
+
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
+    end
+
+    it 'uses a value of false for replace by default' do
+      namespace :something do
+        described_class.define
+      end
+
+      rake_task = Rake::Task['something:idiomise']
+
+      expect(rake_task.creator.replace).to(be(false))
     end
 
     it 'sets replace to true when the fix parameter is true' do
       namespace :something do
-        subject.define(fix: true)
+        described_class.define(fix: true)
       end
 
-      rake_task = Rake::Task["something:idiomise"]
+      rake_task = Rake::Task['something:idiomise']
 
-      expect(rake_task.creator.replace).to(eq(true))
+      expect(rake_task.creator.replace).to(be(true))
     end
 
     it 'sets replace to false when the fix parameter is false' do
       namespace :something do
-        subject.define(fix: true)
+        described_class.define(fix: false)
       end
 
-      rake_task = Rake::Task["something:idiomise"]
+      rake_task = Rake::Task['something:idiomise']
 
-      expect(rake_task.creator.replace).to(eq(true))
+      expect(rake_task.creator.replace).to(be(false))
     end
 
     it 'uses the provided idiomise task name when present' do
       namespace :something do
-        subject.define(optimise_task_name: :kibit)
+        described_class.define(optimise_task_name: :kibit)
       end
 
-      expect(Rake::Task.task_defined?("something:kibit")).to(be(true))
+      expect(Rake.application)
+        .to(have_task_defined('something:kibit'))
     end
 
     it 'uses the provided argument names when present' do
-      argument_names = [:argument, :names]
+      argument_names = %i[argument names]
 
       namespace :something do
-        subject.define(
-            argument_names: argument_names)
+        described_class.define(
+          argument_names: argument_names
+        )
       end
 
-      rake_task = Rake::Task["something:idiomise"]
+      rake_task = Rake::Task['something:idiomise']
 
       expect(rake_task.arg_names).to(eq(argument_names))
     end
   end
 
-  context 'format task' do
-    it 'configures with passed parameters' do
+  describe 'format task' do
+    it 'configures with passed profile' do
       profile = 'test'
-      environment = {"VAR" => "val"}
+
+      namespace :something do
+        described_class.define(
+          profile: profile
+        )
+      end
+
+      rake_task = Rake::Task['something:format']
+
+      expect(rake_task.creator.profile).to(eq(profile))
+    end
+
+    it 'configures with passed environment' do
+      environment = { 'VAR' => 'val' }
+
+      namespace :something do
+        described_class.define(
+          environment: environment
+        )
+      end
+
+      rake_task = Rake::Task['something:format']
+
+      expect(rake_task.creator.environment).to(eq(environment))
+    end
+
+    it 'configures with passed directory' do
       directory = 'module1'
+
+      namespace :something do
+        described_class.define(
+          directory: directory
+        )
+      end
+
+      rake_task = Rake::Task['something:format']
+
+      expect(rake_task.creator.directory).to(eq(directory))
+    end
+
+    it 'configures with passed ensure task name' do
       ensure_task_name = 'lein:ensure'
 
       namespace :lein do
@@ -184,68 +341,104 @@ describe RakeLeiningen::TaskSets::Checks do
       end
 
       namespace :something do
-        subject.define(
-            profile: profile,
-            environment: environment,
-            directory: directory,
-            ensure_task_name: ensure_task_name)
+        described_class.define(
+          ensure_task_name: ensure_task_name
+        )
       end
 
-      rake_task = Rake::Task["something:format"]
+      rake_task = Rake::Task['something:format']
 
-      expect(rake_task.creator.profile).to(eq(profile))
-      expect(rake_task.creator.environment).to(eq(environment))
-      expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
     end
 
     it 'sets mode to fix when the fix parameter is true' do
       namespace :something do
-        subject.define(fix: true)
+        described_class.define(fix: true)
       end
 
-      rake_task = Rake::Task["something:format"]
+      rake_task = Rake::Task['something:format']
 
       expect(rake_task.creator.mode).to(eq(:fix))
     end
 
     it 'sets mode to check when the fix parameter is false' do
       namespace :something do
-        subject.define(fix: false)
+        described_class.define(fix: false)
       end
 
-      rake_task = Rake::Task["something:format"]
+      rake_task = Rake::Task['something:format']
 
       expect(rake_task.creator.mode).to(eq(:check))
     end
 
     it 'uses the provided format task name when present' do
       namespace :something do
-        subject.define(optimise_task_name: :cljfmt)
+        described_class.define(optimise_task_name: :cljfmt)
       end
 
-      expect(Rake::Task.task_defined?("something:cljfmt")).to(be(true))
+      expect(Rake.application)
+        .to(have_task_defined('something:cljfmt'))
     end
 
     it 'uses the provided argument names when present' do
-      argument_names = [:argument, :names]
+      argument_names = %i[argument names]
 
       namespace :something do
-        subject.define(
-            argument_names: argument_names)
+        described_class.define(
+          argument_names: argument_names
+        )
       end
 
-      rake_task = Rake::Task["something:format"]
+      rake_task = Rake::Task['something:format']
 
       expect(rake_task.arg_names).to(eq(argument_names))
     end
   end
 
-  context 'pedantise task' do
-    it 'configures with passed parameters' do
+  describe 'pedantise task' do
+    it 'configures with passed profile' do
       profile = 'test'
-      environment = {"VAR" => "val"}
+
+      namespace :something do
+        described_class.define(
+          profile: profile
+        )
+      end
+
+      rake_task = Rake::Task['something:pedantise']
+
+      expect(rake_task.creator.profile).to(eq(profile))
+    end
+
+    it 'configures with passed environment' do
+      environment = { 'VAR' => 'val' }
+
+      namespace :something do
+        described_class.define(
+          environment: environment
+        )
+      end
+
+      rake_task = Rake::Task['something:pedantise']
+
+      expect(rake_task.creator.environment).to(eq(environment))
+    end
+
+    it 'configures with passed directory' do
       directory = 'module1'
+
+      namespace :something do
+        described_class.define(
+          directory: directory
+        )
+      end
+
+      rake_task = Rake::Task['something:pedantise']
+
+      expect(rake_task.creator.directory).to(eq(directory))
+    end
+
+    it 'configures with passed ensure task name' do
       ensure_task_name = 'lein:ensure'
 
       namespace :lein do
@@ -253,87 +446,178 @@ describe RakeLeiningen::TaskSets::Checks do
       end
 
       namespace :something do
-        subject.define(
-            profile: profile,
-            environment: environment,
-            directory: directory,
-            ensure_task_name: ensure_task_name)
+        described_class.define(
+          ensure_task_name: ensure_task_name
+        )
       end
 
-      rake_task = Rake::Task["something:pedantise"]
+      rake_task = Rake::Task['something:pedantise']
 
-      expect(rake_task.creator.profile).to(eq(profile))
-      expect(rake_task.creator.environment).to(eq(environment))
-      expect(rake_task.creator.directory).to(eq(directory))
       expect(rake_task.creator.ensure_task_name).to(eq(ensure_task_name))
     end
 
     it 'uses the provided pedantise task name when present' do
       namespace :something do
-        subject.define(optimise_task_name: :bikeshed)
+        described_class.define(optimise_task_name: :bikeshed)
       end
 
-      expect(Rake::Task.task_defined?("something:bikeshed")).to(be(true))
+      expect(Rake.application)
+        .to(have_task_defined('something:bikeshed'))
     end
 
     it 'uses the provided argument names when present' do
-      argument_names = [:argument, :names]
+      argument_names = %i[argument names]
 
       namespace :something do
-        subject.define(
-            argument_names: argument_names)
+        described_class.define(
+          argument_names: argument_names
+        )
       end
 
-      rake_task = Rake::Task["something:pedantise"]
+      rake_task = Rake::Task['something:pedantise']
 
       expect(rake_task.arg_names).to(eq(argument_names))
     end
   end
 
-  context 'check task' do
-    it 'defines the check command with the default task names' do
+  describe 'check task' do
+    it 'defines the check command with the default lint task name' do
       namespace :something do
-        subject.define
+        described_class.define
       end
 
-      rake_task = Rake::Task["something:check"]
+      rake_task = Rake::Task['something:check']
 
       expect(rake_task.creator.lint_task_name).to(eq(:lint))
+    end
+
+    it 'defines the check command with the default optimise task name' do
+      namespace :something do
+        described_class.define
+      end
+
+      rake_task = Rake::Task['something:check']
+
       expect(rake_task.creator.optimise_task_name).to(eq(:optimise))
+    end
+
+    it 'defines the check command with the default idiomise task name' do
+      namespace :something do
+        described_class.define
+      end
+
+      rake_task = Rake::Task['something:check']
+
       expect(rake_task.creator.idiomise_task_name).to(eq(:idiomise))
+    end
+
+    it 'defines the check command with the default format task name' do
+      namespace :something do
+        described_class.define
+      end
+
+      rake_task = Rake::Task['something:check']
+
       expect(rake_task.creator.format_task_name).to(eq(:format))
+    end
+
+    it 'defines the check command with the default pedantise task name' do
+      namespace :something do
+        described_class.define
+      end
+
+      rake_task = Rake::Task['something:check']
+
       expect(rake_task.creator.pedantise_task_name).to(eq(:pedantise))
     end
 
-    it 'defines the check command with the specified task names' do
+    it 'defines the check command with the specified line task name' do
       namespace :lein do
         task :ensure
       end
 
       namespace :something do
-        subject.define(
-            lint_task_name: :eastwood,
-            optimise_task_name: :check_reflection,
-            idiomise_task_name: :kibit,
-            format_task_name: :cljfmt,
-            pedantise_task_name: :bikeshed)
+        described_class.define(
+          lint_task_name: :eastwood
+        )
       end
 
-      rake_task = Rake::Task["something:check"]
+      rake_task = Rake::Task['something:check']
 
       expect(rake_task.creator.lint_task_name).to(eq(:eastwood))
+    end
+
+    it 'defines the check command with the specified optimise task names' do
+      namespace :lein do
+        task :ensure
+      end
+
+      namespace :something do
+        described_class.define(
+          optimise_task_name: :check_reflection
+        )
+      end
+
+      rake_task = Rake::Task['something:check']
+
       expect(rake_task.creator.optimise_task_name).to(eq(:check_reflection))
+    end
+
+    it 'defines the check command with the specified idiomise task name' do
+      namespace :lein do
+        task :ensure
+      end
+
+      namespace :something do
+        described_class.define(
+          idiomise_task_name: :kibit
+        )
+      end
+
+      rake_task = Rake::Task['something:check']
+
       expect(rake_task.creator.idiomise_task_name).to(eq(:kibit))
+    end
+
+    it 'defines the check command with the specified format task name' do
+      namespace :lein do
+        task :ensure
+      end
+
+      namespace :something do
+        described_class.define(
+          format_task_name: :cljfmt
+        )
+      end
+
+      rake_task = Rake::Task['something:check']
+
       expect(rake_task.creator.format_task_name).to(eq(:cljfmt))
+    end
+
+    it 'defines the check command with the specified pedantise task name' do
+      namespace :lein do
+        task :ensure
+      end
+
+      namespace :something do
+        described_class.define(
+          pedantise_task_name: :bikeshed
+        )
+      end
+
+      rake_task = Rake::Task['something:check']
+
       expect(rake_task.creator.pedantise_task_name).to(eq(:bikeshed))
     end
 
-    it 'uses the provided pedantise task name when present' do
+    it 'uses the provided check task name when present' do
       namespace :something do
-        subject.define(check_task_name: :run_all_checks)
+        described_class.define(check_task_name: :run_all_checks)
       end
 
-      expect(Rake::Task.task_defined?("something:run_all_checks")).to(be(true))
+      expect(Rake.application)
+        .to(have_task_defined('something:run_all_checks'))
     end
   end
 end

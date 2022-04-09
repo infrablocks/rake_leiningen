@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake_factory'
 require 'ruby_leiningen'
 require 'ruby_leiningen/plugins'
@@ -10,10 +12,10 @@ module RakeLeiningen
       include Mixins::Directoried
 
       default_name :idiomise
-      default_description "Transform all clojure files to be more idiomatic."
-      default_prerequisites RakeFactory::DynamicValue.new { |t|
+      default_description 'Transform all clojure files to be more idiomatic.'
+      default_prerequisites(RakeFactory::DynamicValue.new do |t|
         t.ensure_task_name ? [t.ensure_task_name] : []
-      }
+      end)
 
       parameter :replace
       parameter :interactive
@@ -27,16 +29,17 @@ module RakeLeiningen
       parameter :ensure_task_name, default: 'leiningen:ensure'
 
       action do |t|
-        puts "Making all clojure files more idiomatic..."
+        $stdout.puts 'Making all clojure files more idiomatic...'
 
         in_directory(t.directory) do
           RubyLeiningen.kibit(
-              replace: t.replace,
-              interactive: t.interactive,
-              reporter: t.reporter,
-              paths: t.paths,
-              profile: t.profile,
-              environment: t.environment)
+            replace: t.replace,
+            interactive: t.interactive,
+            reporter: t.reporter,
+            paths: t.paths,
+            profile: t.profile,
+            environment: t.environment
+          )
         end
       end
     end

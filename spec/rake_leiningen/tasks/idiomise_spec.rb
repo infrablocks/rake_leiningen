@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe RakeLeiningen::Tasks::Idiomise do
-  include_context :rake
+  include_context 'rake'
 
-  before(:each) do
+  before do
     namespace :leiningen do
       task :ensure
     end
@@ -11,49 +13,54 @@ describe RakeLeiningen::Tasks::Idiomise do
 
   it 'adds an idiomise task in the namespace in which it is created' do
     namespace :something do
-      subject.define
+      described_class.define
     end
 
-    expect(Rake::Task.task_defined?('something:idiomise')).to(be(true))
+    expect(Rake.application)
+      .to(have_task_defined('something:idiomise'))
   end
 
   it 'gives the idiomise task a description' do
     namespace :something do
-      subject.define
+      described_class.define
     end
 
-    expect(Rake::Task["something:idiomise"].full_comment)
-        .to(eq("Transform all clojure files to be more idiomatic."))
+    expect(Rake::Task['something:idiomise'].full_comment)
+      .to(eq('Transform all clojure files to be more idiomatic.'))
   end
 
   it 'allows the task name to be overridden' do
     namespace :something do
-      subject.define(name: :kibit)
+      described_class.define(name: :kibit)
     end
 
-    expect(Rake::Task.task_defined?("something:kibit")).to(be(true))
+    expect(Rake.application)
+      .to(have_task_defined('something:kibit'))
   end
 
   it 'allows multiple idiomise tasks to be declared' do
     namespace :something1 do
-      subject.define
+      described_class.define
     end
 
     namespace :something2 do
-      subject.define
+      described_class.define
     end
 
-    expect(Rake::Task.task_defined?("something1:idiomise")).to(be(true))
-    expect(Rake::Task.task_defined?("something2:idiomise")).to(be(true))
+    expect(Rake.application)
+      .to(have_tasks_defined(
+            %w[something1:idiomise
+               something2:idiomise]
+          ))
   end
 
   it 'depends on the leiningen:ensure task by default' do
     namespace :something do
-      subject.define
+      described_class.define
     end
 
-    expect(Rake::Task["something:idiomise"].prerequisite_tasks)
-        .to(include(Rake::Task["leiningen:ensure"]))
+    expect(Rake::Task['something:idiomise'].prerequisite_tasks)
+      .to(include(Rake::Task['leiningen:ensure']))
   end
 
   it 'depends on the provided task if specified' do
@@ -64,193 +71,225 @@ describe RakeLeiningen::Tasks::Idiomise do
     end
 
     namespace :something do
-      subject.define(ensure_task_name: "tools:leiningen:ensure")
+      described_class.define(ensure_task_name: 'tools:leiningen:ensure')
     end
 
-    expect(Rake::Task["something:idiomise"].prerequisite_tasks)
-        .to(include(Rake::Task["tools:leiningen:ensure"]))
+    expect(Rake::Task['something:idiomise'].prerequisite_tasks)
+      .to(include(Rake::Task['tools:leiningen:ensure']))
   end
 
   it 'configures the task with the provided arguments if specified' do
-    argument_names = [:deployment_identifier, :region]
+    argument_names = %i[deployment_identifier region]
 
     namespace :something do
-      subject.define(argument_names: argument_names)
+      described_class.define(argument_names: argument_names)
     end
 
     expect(Rake::Task['something:idiomise'].arg_names)
-        .to(eq(argument_names))
+      .to(eq(argument_names))
   end
 
   it 'executes kibit on invocation' do
-    stub_puts
+    stub_output
     stub_chdir
 
-    expect(RubyLeiningen)
-        .to(receive(:kibit)
-            .with(
-                replace: nil,
-                interactive: nil,
-                reporter: nil,
-                paths: nil,
-                profile: nil,
-                environment: nil))
+    allow(RubyLeiningen).to(receive(:kibit))
 
     namespace :something do
-      subject.define
+      described_class.define
     end
 
-    Rake::Task["something:idiomise"].invoke
+    Rake::Task['something:idiomise'].invoke
+
+    expect(RubyLeiningen)
+      .to(have_received(:kibit)
+            .with(
+              replace: nil,
+              interactive: nil,
+              reporter: nil,
+              paths: nil,
+              profile: nil,
+              environment: nil
+            ))
   end
 
   it 'uses the provided value for replace when specified' do
-    stub_puts
+    stub_output
     stub_chdir
 
-    expect(RubyLeiningen)
-        .to(receive(:kibit)
-            .with(
-                replace: true,
-                interactive: nil,
-                reporter: nil,
-                paths: nil,
-                profile: nil,
-                environment: nil))
+    allow(RubyLeiningen).to(receive(:kibit))
 
     namespace :something do
-      subject.define(replace: true)
+      described_class.define(replace: true)
     end
 
-    Rake::Task["something:idiomise"].invoke
+    Rake::Task['something:idiomise'].invoke
+
+    expect(RubyLeiningen)
+      .to(have_received(:kibit)
+            .with(
+              replace: true,
+              interactive: nil,
+              reporter: nil,
+              paths: nil,
+              profile: nil,
+              environment: nil
+            ))
   end
 
   it 'uses the provided value for interactive when specified' do
-    stub_puts
+    stub_output
     stub_chdir
 
-    expect(RubyLeiningen)
-        .to(receive(:kibit)
-            .with(
-                replace: nil,
-                interactive: true,
-                reporter: nil,
-                paths: nil,
-                profile: nil,
-                environment: nil))
+    allow(RubyLeiningen).to(receive(:kibit))
 
     namespace :something do
-      subject.define(interactive: true)
+      described_class.define(interactive: true)
     end
 
-    Rake::Task["something:idiomise"].invoke
+    Rake::Task['something:idiomise'].invoke
+
+    expect(RubyLeiningen)
+      .to(have_received(:kibit)
+            .with(
+              replace: nil,
+              interactive: true,
+              reporter: nil,
+              paths: nil,
+              profile: nil,
+              environment: nil
+            ))
   end
 
   it 'uses the provided reporter when specified' do
-    stub_puts
+    stub_output
     stub_chdir
 
-    expect(RubyLeiningen)
-        .to(receive(:kibit)
-            .with(
-                replace: nil,
-                interactive: nil,
-                reporter: "markdown",
-                paths: nil,
-                profile: nil,
-                environment: nil))
+    allow(RubyLeiningen).to(receive(:kibit))
 
     namespace :something do
-      subject.define(reporter: "markdown")
+      described_class.define(reporter: 'markdown')
     end
 
-    Rake::Task["something:idiomise"].invoke
+    Rake::Task['something:idiomise'].invoke
+
+    expect(RubyLeiningen)
+      .to(have_received(:kibit)
+            .with(
+              replace: nil,
+              interactive: nil,
+              reporter: 'markdown',
+              paths: nil,
+              profile: nil,
+              environment: nil
+            ))
   end
 
   it 'uses the provided paths when specified' do
-    stub_puts
+    stub_output
     stub_chdir
 
-    expect(RubyLeiningen)
-        .to(receive(:kibit)
-            .with(
-                replace: nil,
-                interactive: nil,
-                reporter: nil,
-                paths: ["path/to/src/clj/", "path/to/src/cljs/util.cljs"],
-                profile: nil,
-                environment: nil))
+    allow(RubyLeiningen).to(receive(:kibit))
 
     namespace :something do
-      subject.define(paths: ["path/to/src/clj/", "path/to/src/cljs/util.cljs"])
+      described_class.define(
+        paths: %w[path/to/src/clj/ path/to/src/cljs/util.cljs]
+      )
     end
 
-    Rake::Task["something:idiomise"].invoke
+    Rake::Task['something:idiomise'].invoke
+
+    expect(RubyLeiningen)
+      .to(have_received(:kibit)
+            .with(
+              replace: nil,
+              interactive: nil,
+              reporter: nil,
+              paths: %w[path/to/src/clj/ path/to/src/cljs/util.cljs],
+              profile: nil,
+              environment: nil
+            ))
   end
 
   it 'uses the provided profile when specified' do
-    stub_puts
+    stub_output
     stub_chdir
 
-    expect(RubyLeiningen)
-        .to(receive(:kibit)
-            .with(
-                replace: nil,
-                interactive: nil,
-                reporter: nil,
-                paths: nil,
-                profile: "test",
-                environment: nil))
+    allow(RubyLeiningen).to(receive(:kibit))
 
     namespace :something do
-      subject.define(profile: "test")
+      described_class.define(profile: 'test')
     end
 
-    Rake::Task["something:idiomise"].invoke
+    Rake::Task['something:idiomise'].invoke
+
+    expect(RubyLeiningen)
+      .to(have_received(:kibit)
+            .with(
+              replace: nil,
+              interactive: nil,
+              reporter: nil,
+              paths: nil,
+              profile: 'test',
+              environment: nil
+            ))
   end
 
   it 'uses the provided environment when specified' do
-    stub_puts
+    stub_output
     stub_chdir
 
+    allow(RubyLeiningen).to(receive(:kibit))
+
+    namespace :something do
+      described_class.define(environment: { 'VAR' => 'val' })
+    end
+
+    Rake::Task['something:idiomise'].invoke
+
     expect(RubyLeiningen)
-        .to(receive(:kibit)
+      .to(have_received(:kibit)
             .with(
-                replace: nil,
-                interactive: nil,
-                reporter: nil,
-                paths: nil,
-                profile: nil,
-                environment: {"VAR" => "val"}))
-
-    namespace :something do
-      subject.define(environment: {"VAR" => "val"})
-    end
-
-    Rake::Task["something:idiomise"].invoke
+              replace: nil,
+              interactive: nil,
+              reporter: nil,
+              paths: nil,
+              profile: nil,
+              environment: { 'VAR' => 'val' }
+            ))
   end
 
+  # rubocop:disable RSpec/MultipleExpectations
   it 'changes directory if the directory parameter is specified' do
-    stub_puts
-    
-    directory = "some/other/directory"
+    stub_output
 
-    expect(Dir).to(receive(:chdir).with(directory).and_yield)
+    directory = 'some/other/directory'
 
-    expect(RubyLeiningen)
-        .to(receive(:kibit))
+    allow(Dir).to(receive(:chdir).and_yield)
+    allow(RubyLeiningen).to(receive(:kibit))
 
     namespace :something do
-      subject.define(directory: directory)
+      described_class.define(directory: directory)
     end
 
-    Rake::Task["something:idiomise"].invoke
+    Rake::Task['something:idiomise'].invoke
+
+    expect(Dir)
+      .to(have_received(:chdir)
+            .with(directory))
+    expect(RubyLeiningen)
+      .to(have_received(:kibit))
   end
+  # rubocop:enable RSpec/MultipleExpectations
 
   def stub_chdir
     allow(Dir).to(receive(:chdir).and_yield)
   end
 
-  def stub_puts
-    allow_any_instance_of(Kernel).to(receive(:puts))
+  def stub_output
+    %i[print puts].each do |method|
+      allow($stdout).to(receive(method))
+      allow($stderr).to(receive(method))
+    end
   end
 end
