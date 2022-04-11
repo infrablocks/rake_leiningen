@@ -127,7 +127,7 @@ GEM
     ruby2_keywords (0.0.5)
     ruby_gpg2 (0.8.0)
       lino (>= 1.5)
-    ruby_leiningen (0.24.0.pre.6)
+    ruby_leiningen (0.24.0.pre.7)
       activesupport (>= 6.0.2, < 8)
       lino (~> 3.0)
     rubyzip (2.3.2)
