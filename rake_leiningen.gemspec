@@ -38,7 +38,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rake_dependencies', '~> 3.1'
   spec.add_dependency 'rake_factory', '~> 0.23'
-  spec.add_dependency 'ruby_leiningen', '~> 0.21'
+  spec.add_dependency 'ruby_leiningen', '0.24.0.pre.8'
   spec.add_dependency 'semantic', '~> 1.6'
 
   spec.add_development_dependency 'activesupport'
