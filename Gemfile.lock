@@ -4,7 +4,7 @@ PATH
     rake_leiningen (0.36.0)
       rake_dependencies (~> 3.1)
       rake_factory (~> 0.23)
-      ruby_leiningen (= 0.25.0)
+      ruby_leiningen (= 0.27.0)
       semantic (~> 1.6)
 
 GEM
@@ -112,7 +112,7 @@ GEM
     ruby2_keywords (0.0.5)
     ruby_gpg2 (0.10.0)
       lino (~> 3.0)
-    ruby_leiningen (0.25.0)
+    ruby_leiningen (0.27.0)
       activesupport (>= 6.0.2, < 8)
       lino (~> 3.0)
     rubyzip (2.3.2)
