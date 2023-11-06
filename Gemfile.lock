@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rake_leiningen (0.37.0.pre.3)
+    rake_leiningen (0.37.0.pre.4)
       rake_dependencies (~> 3.1)
       rake_factory (~> 0.23)
       ruby_leiningen (= 0.27.0)
