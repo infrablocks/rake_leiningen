@@ -82,7 +82,7 @@ describe RakeLeiningen::Tasks::Optimise do
     argument_names = %i[deployment_identifier region]
 
     namespace :something do
-      described_class.define(argument_names: argument_names)
+      described_class.define(argument_names:)
     end
 
     expect(Rake::Task['something:optimise'].arg_names)
@@ -159,7 +159,7 @@ describe RakeLeiningen::Tasks::Optimise do
     allow(RubyLeiningen).to(receive(:check))
 
     namespace :something do
-      described_class.define(directory: directory)
+      described_class.define(directory:)
     end
 
     Rake::Task['something:optimise'].invoke

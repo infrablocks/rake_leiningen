@@ -82,7 +82,7 @@ describe RakeLeiningen::Tasks::Start do
     argument_names = %i[deployment_identifier region]
 
     namespace :something do
-      described_class.define(argument_names: argument_names)
+      described_class.define(argument_names:)
     end
 
     expect(Rake::Task['something:start'].arg_names)
@@ -214,7 +214,7 @@ describe RakeLeiningen::Tasks::Start do
     allow(RubyLeiningen).to(receive(:run))
 
     namespace :something do
-      described_class.define(directory: directory)
+      described_class.define(directory:)
     end
 
     Rake::Task['something:start'].invoke

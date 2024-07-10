@@ -82,7 +82,7 @@ describe RakeLeiningen::Tasks::Release do
     argument_names = [:level]
 
     namespace :something do
-      described_class.define(argument_names: argument_names)
+      described_class.define(argument_names:)
     end
 
     expect(Rake::Task['something:release'].arg_names)
@@ -184,7 +184,7 @@ describe RakeLeiningen::Tasks::Release do
     allow(RubyLeiningen).to(receive(:release))
 
     namespace :something do
-      described_class.define(directory: directory)
+      described_class.define(directory:)
     end
 
     Rake::Task['something:release'].invoke

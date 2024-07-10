@@ -91,7 +91,7 @@ describe RakeLeiningen::Tasks::Test do
     argument_names = %i[deployment_identifier region]
 
     namespace :something do
-      described_class.define(argument_names: argument_names)
+      described_class.define(argument_names:)
     end
 
     expect(Rake::Task['something:test'].arg_names)
@@ -278,7 +278,7 @@ describe RakeLeiningen::Tasks::Test do
     allow(RubyLeiningen).to(receive(:eftest))
 
     namespace :something do
-      described_class.define(directory: directory)
+      described_class.define(directory:)
     end
 
     Rake::Task['something:test'].invoke

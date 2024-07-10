@@ -80,7 +80,7 @@ describe RakeLeiningen::Tasks::Format do
     argument_names = %i[deployment_identifier region]
 
     namespace :something do
-      described_class.define(argument_names: argument_names)
+      described_class.define(argument_names:)
     end
 
     expect(Rake::Task['something:format'].arg_names)
@@ -207,7 +207,7 @@ describe RakeLeiningen::Tasks::Format do
     allow(RubyLeiningen).to(receive(:cljfmt))
 
     namespace :something do
-      described_class.define(directory: directory)
+      described_class.define(directory:)
     end
 
     Rake::Task['something:format'].invoke

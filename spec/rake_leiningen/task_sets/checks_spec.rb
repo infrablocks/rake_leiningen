@@ -11,7 +11,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          profile: profile
+          profile:
         )
       end
 
@@ -25,7 +25,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          environment: environment
+          environment:
         )
       end
 
@@ -39,7 +39,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          directory: directory
+          directory:
         )
       end
 
@@ -57,7 +57,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          ensure_task_name: ensure_task_name
+          ensure_task_name:
         )
       end
 
@@ -80,7 +80,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          argument_names: argument_names
+          argument_names:
         )
       end
 
@@ -96,7 +96,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          profile: profile
+          profile:
         )
       end
 
@@ -110,7 +110,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          environment: environment
+          environment:
         )
       end
 
@@ -124,7 +124,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          directory: directory
+          directory:
         )
       end
 
@@ -142,7 +142,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          ensure_task_name: ensure_task_name
+          ensure_task_name:
         )
       end
 
@@ -165,7 +165,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          argument_names: argument_names
+          argument_names:
         )
       end
 
@@ -185,7 +185,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          profile: profile
+          profile:
         )
       end
 
@@ -199,7 +199,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          environment: environment
+          environment:
         )
       end
 
@@ -213,7 +213,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          directory: directory
+          directory:
         )
       end
 
@@ -227,7 +227,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          ensure_task_name: ensure_task_name
+          ensure_task_name:
         )
       end
 
@@ -280,7 +280,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          argument_names: argument_names
+          argument_names:
         )
       end
 
@@ -296,7 +296,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          profile: profile
+          profile:
         )
       end
 
@@ -310,7 +310,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          environment: environment
+          environment:
         )
       end
 
@@ -324,7 +324,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          directory: directory
+          directory:
         )
       end
 
@@ -342,7 +342,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          ensure_task_name: ensure_task_name
+          ensure_task_name:
         )
       end
 
@@ -385,7 +385,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          argument_names: argument_names
+          argument_names:
         )
       end
 
@@ -401,7 +401,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          profile: profile
+          profile:
         )
       end
 
@@ -415,7 +415,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          environment: environment
+          environment:
         )
       end
 
@@ -429,7 +429,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          directory: directory
+          directory:
         )
       end
 
@@ -447,7 +447,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          ensure_task_name: ensure_task_name
+          ensure_task_name:
         )
       end
 
@@ -470,7 +470,7 @@ describe RakeLeiningen::TaskSets::Checks do
 
       namespace :something do
         described_class.define(
-          argument_names: argument_names
+          argument_names:
         )
       end
 

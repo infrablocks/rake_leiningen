@@ -82,7 +82,7 @@ describe RakeLeiningen::Tasks::Lint do
     argument_names = %i[deployment_identifier region]
 
     namespace :something do
-      described_class.define(argument_names: argument_names)
+      described_class.define(argument_names:)
     end
 
     expect(Rake::Task['something:lint'].arg_names)
@@ -183,7 +183,7 @@ describe RakeLeiningen::Tasks::Lint do
     allow(RubyLeiningen).to(receive(:eastwood))
 
     namespace :something do
-      described_class.define(directory: directory)
+      described_class.define(directory:)
     end
 
     Rake::Task['something:lint'].invoke

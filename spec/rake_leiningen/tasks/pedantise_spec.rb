@@ -82,7 +82,7 @@ describe RakeLeiningen::Tasks::Pedantise do
     argument_names = %i[deployment_identifier region]
 
     namespace :something do
-      described_class.define(argument_names: argument_names)
+      described_class.define(argument_names:)
     end
 
     expect(Rake::Task['something:pedantise'].arg_names)
@@ -492,7 +492,7 @@ describe RakeLeiningen::Tasks::Pedantise do
       .to(receive(:bikeshed))
 
     namespace :something do
-      described_class.define(directory: directory)
+      described_class.define(directory:)
     end
 
     Rake::Task['something:pedantise'].invoke

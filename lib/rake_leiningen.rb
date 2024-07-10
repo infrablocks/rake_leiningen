@@ -6,24 +6,24 @@ require 'rake_leiningen/tasks'
 require 'rake_leiningen/task_sets'
 
 module RakeLeiningen
-  def self.define_check_tasks(opts = {}, &block)
-    RakeLeiningen::TaskSets::Checks.define(opts, &block)
+  def self.define_check_tasks(opts = {}, &)
+    RakeLeiningen::TaskSets::Checks.define(opts, &)
   end
 
-  def self.define_build_task(opts = {}, &block)
-    RakeLeiningen::Tasks::Build.define(opts, &block)
+  def self.define_build_task(opts = {}, &)
+    RakeLeiningen::Tasks::Build.define(opts, &)
   end
 
-  def self.define_release_task(opts = {}, &block)
-    RakeLeiningen::Tasks::Release.define(opts, &block)
+  def self.define_release_task(opts = {}, &)
+    RakeLeiningen::Tasks::Release.define(opts, &)
   end
 
-  def self.define_start_task(opts = {}, &block)
-    RakeLeiningen::Tasks::Start.define(opts, &block)
+  def self.define_start_task(opts = {}, &)
+    RakeLeiningen::Tasks::Start.define(opts, &)
   end
 
-  def self.define_test_task(opts = {}, &block)
-    RakeLeiningen::Tasks::Test.define(opts, &block)
+  def self.define_test_task(opts = {}, &)
+    RakeLeiningen::Tasks::Test.define(opts, &)
   end
 
   def self.define_installation_tasks(opts = {})
@@ -98,9 +98,11 @@ module RakeLeiningen
     end
 
     def get_version(binary)
-      version_string = StringIO.new
-      version_command(binary).execute(stdout: version_string)
-      version_string.string.lines.first
+      stdout = Tempfile.new
+      version_command(binary).execute(stdout:)
+      stdout.rewind
+      version_string = stdout.read
+      version_string.lines.first
     end
 
     def version_command(binary)

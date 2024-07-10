@@ -58,7 +58,7 @@ describe RakeLeiningen::Tasks::Check do
     argument_names = %i[deployment_identifier region]
 
     namespace :something do
-      described_class.define(argument_names: argument_names)
+      described_class.define(argument_names:)
     end
 
     expect(Rake::Task['something:check'].arg_names)
